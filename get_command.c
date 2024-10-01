@@ -6,25 +6,11 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 10:38:06 by sniemela          #+#    #+#             */
-/*   Updated: 2024/09/23 10:43:20 by sniemela         ###   ########.fr       */
+/*   Updated: 2024/10/01 11:08:59 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-char	*is_cmd_path(t_pipex *pipex, const char *cmd)
-{
-	if (access(cmd, F_OK) == 0)
-		return (ft_strdup(cmd));
-	else
-	{
-		errno = ENOENT;
-		ft_putstr_fd("pipex: ", 2);
-		perror(cmd);
-		free_resources(pipex);
-		exit(127);
-	}
-}
 
 char	*constr_full_path(char **paths, const char *cmd)
 {
@@ -79,8 +65,6 @@ char	*get_path(t_pipex *pipex, const char *cmd)
 	char	**paths;
 	char	*full_path;
 
-	if (ft_strchr(cmd, '/'))
-		return (is_cmd_path(pipex, cmd));
 	path_env = get_env(pipex, cmd);
 	paths = ft_split(path_env, ':');
 	if (!paths)

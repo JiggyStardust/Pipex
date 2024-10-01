@@ -3,25 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   child_process.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sniemela <sniemela@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/08 11:48:27 by sniemela          #+#    #+#             */
-/*   Updated: 2024/09/24 10:36:44 by sniemela         ###   ########.fr       */
+/*   Updated: 2024/10/01 11:10:33 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-int	is_whitespace(char *str)
-{
-	while (*str)
-	{
-		if (*str != 32 && (*str < 9 || *str > 13))
-			return (0);
-		str++;
-	}
-	return (1);
-}
 
 void	check_access(t_pipex *pipex, char *cmd, char **cmd_arr)
 {
@@ -50,6 +39,32 @@ void	check_access(t_pipex *pipex, char *cmd, char **cmd_arr)
 		errno = EACCES;
 		exit_cmd_error(pipex, cmd, cmd_arr);
 	}
+}
+
+char	*is_cmd_path(t_pipex *pipex, char *cmd, char **cmd_array)
+{
+	if (access(cmd, F_OK) == 0)
+		return (ft_strdup(cmd));
+	else
+	{
+		errno = ENOENT;
+		ft_putstr_fd("pipex: ", 2);
+		perror(cmd);
+		free_2d_array(cmd_array);
+		free_resources(pipex);
+		exit(127);
+	}
+}
+
+int	is_whitespace(char *str)
+{
+	while (*str)
+	{
+		if (*str != 32 && (*str < 9 || *str > 13))
+			return (0);
+		str++;
+	}
+	return (1);
 }
 
 void	setup_child(t_pipex *pipex, int i)
@@ -95,7 +110,10 @@ int	fork_and_execute(t_pipex *pipex, int cmd_i)
 		cmd = ft_split(pipex->argv[cmd_i + 2], ' ');
 		if (!cmd || !cmd[0] || is_whitespace(pipex->argv[cmd_i + 2]))
 			exit_cmd_error(pipex, pipex->argv[cmd_i + 2], cmd);
-		cmd_path = get_path(pipex, cmd[0]);
+		if (ft_strchr(cmd[0], '/'))
+			cmd_path = is_cmd_path(pipex, cmd[0], cmd);
+		else
+			cmd_path = get_path(pipex, cmd[0]);
 		if (!cmd_path)
 			check_access(pipex, cmd[0], cmd);
 		check_access(pipex, cmd_path, cmd);

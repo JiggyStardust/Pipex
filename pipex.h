@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sniemela <sniemela@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 15:51:16 by sniemela          #+#    #+#             */
-/*   Updated: 2024/09/24 10:35:58 by sniemela         ###   ########.fr       */
+/*   Updated: 2024/10/01 11:03:19 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	free_2d_array(char **array);
 int		fork_and_execute(t_pipex *pipex, int cmd_i);
 char	*get_path(t_pipex *pipex, const char *cmd);
 void	init_pipex(t_pipex *pipex, int argc, char **argv, char **envp);
-char	*is_cmd_path(t_pipex *pipex, const char *cmd);
+char	*is_cmd_path(t_pipex *pipex, char *cmd, char **cmd_array);
 int		open_files(t_pipex *pipex);
 void	setup_child(t_pipex *pipex, int i);
 void	setup_pipes(t_pipex *pipex);

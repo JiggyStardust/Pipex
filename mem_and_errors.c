@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mem_and_errors.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sniemela <sniemela@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 13:50:14 by sniemela          #+#    #+#             */
-/*   Updated: 2024/09/24 10:37:11 by sniemela         ###   ########.fr       */
+/*   Updated: 2024/09/30 16:36:56 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,10 @@ void	exit_cmd_error(t_pipex *pipex, char *cmd, char **cmd_array)
 		ft_putstr_fd(": command not found", 2);
 		ft_putstr_fd("\n", 2);
 	}
+	if (cmd && ft_strchr(cmd, '/'))
+		free(cmd);
 	if (cmd_array)
 		free_2d_array(cmd_array);
-	if (cmd && cmd != pipex->argv[2] && cmd != pipex->argv[3])
-		free(cmd);
 	free_resources(pipex);
 	if (error == EACCES || error == EISDIR)
 		exit(126);

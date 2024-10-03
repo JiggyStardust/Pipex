@@ -6,7 +6,7 @@
 /*   By: sniemela <sniemela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 10:38:06 by sniemela          #+#    #+#             */
-/*   Updated: 2024/10/01 11:08:59 by sniemela         ###   ########.fr       */
+/*   Updated: 2024/10/03 14:32:14 by sniemela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*constr_full_path(char **paths, const char *cmd)
 	return (NULL);
 }
 
-char	*get_env(t_pipex *pipex, const char *cmd)
+char	*get_env(t_pipex *pipex)
 {
 	char	*path_env;
 	int		i;
@@ -54,7 +54,7 @@ char	*get_env(t_pipex *pipex, const char *cmd)
 	if (pipex->envp[i] == NULL)
 	{
 		errno = ENOENT;
-		exit_cmd_error(pipex, (char *)cmd, NULL);
+		return (NULL);
 	}
 	return (path_env);
 }
@@ -65,7 +65,9 @@ char	*get_path(t_pipex *pipex, const char *cmd)
 	char	**paths;
 	char	*full_path;
 
-	path_env = get_env(pipex, cmd);
+	path_env = get_env(pipex);
+	if (!path_env)
+		return (NULL);
 	paths = ft_split(path_env, ':');
 	if (!paths)
 		return (NULL);
